@@ -7,25 +7,28 @@ namespace WebAPI_App.Data
     /// </summary>
     public class DataAccessObject : IDataAccessService
     {
+        public WinTaskContext wtContext;
         public IRepository<Person> Personel;
         public IRepository<Project> Projects;
         public IRepository<Goal> Goals;
         public LinkedDataWorker LinkedData;
 
-        public DataAccessObject()
+        public DataAccessObject(WinTaskContext context)
         {
+            wtContext = context;
+
             UpdateContextInRepositories();
+            UpdateEntityModel();
         }     
 
         public void UpdateEntityModel()
         {
-            using (WinTaskContext wtContext = new WinTaskContext())
-            {
-                Personel.FindAll();
-                var personelToProjects = wtContext.Personel.Include("ProjectsWith");
-                var personelToGoals = wtContext.Personel.Include("GoalsWith");
-                var goalsToProjects = wtContext.Goals.Include("ProjectsWith");
-            }
+
+            Personel.FindAll();
+            var personelToProjects = wtContext.Personel.Include("ProjectsWith");
+            var personelToGoals = wtContext.Personel.Include("GoalsWith");
+            var goalsToProjects = wtContext.Goals.Include("ProjectsWith");
+
         }
 
         public void SaveChanges()
@@ -36,8 +39,7 @@ namespace WebAPI_App.Data
         }
 
         public void UpdateContextInRepositories()
-        {
-            WinTaskContext wtContext = new WinTaskContext();
+        { 
 
             Personel = new BaseRepository<Person>(wtContext);
             Projects = new BaseRepository<Project>(wtContext);

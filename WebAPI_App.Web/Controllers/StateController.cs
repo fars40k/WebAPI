@@ -4,6 +4,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using WebAPI_App.Data;
+using WebAPI_App.Data.Interfaces;
 
 namespace WebAPI_App.Controllers
 {
@@ -11,11 +13,19 @@ namespace WebAPI_App.Controllers
     [ApiController]
     public class StateController : ControllerBase
     {
+        public DatabaseWorker DatabaseWorker;
+
+        public StateController(DatabaseWorker worker)
+        {
+            DatabaseWorker = worker;            
+        }
+
         // GET: api/state
         [HttpGet]
         public bool GetServerState()
         {
-            return true;
+            return DatabaseWorker.IsConnectionEstablished;
         }
+
     }
 }

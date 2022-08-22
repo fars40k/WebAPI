@@ -33,9 +33,21 @@ namespace WebAPI_App.Data
 
         public DatabaseWorker()
         {
-                            
+            using (WinTaskContext wtContext = new WinTaskContext())
+            {
+                wtContext.Database.CreateIfNotExists();
+                wtContext.Database.Connection.Open();
+
+                DataAccessObject.UpdateContextInRepositories();
+                DataAccessObject.UpdateEntityModel();
+
+                IsConnectionEstablished = true;
+            };
         }
 
+        /*
+         *  Obsolete
+         * 
         public void DatabaseWorkerInit(DataAccessObject newDataAccessObject)
         {
             DataAccessObject = (DataAccessObject == null) ? newDataAccessObject 
@@ -150,6 +162,6 @@ namespace WebAPI_App.Data
             {
                 wtContext.SaveChanges();
             }
-        }
+        }*/
     }
 }

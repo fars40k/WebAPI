@@ -11,6 +11,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using WebAPI_App.Data;
+using WebAPI_App.Data.Interfaces;
 
 namespace WebAPI_App.Web
 {
@@ -26,9 +27,12 @@ namespace WebAPI_App.Web
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddSingleton<DatabaseWorker>();
+            services.AddSingleton<DataAccessObject>();
+
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
-            services.AddScoped<WinTaskContext>(_ => new WinTaskContext(Configuration.GetConnectionString("WinTaskManager")));
+            services.AddSingleton<WinTaskContext>(_ => new WinTaskContext(Configuration.GetConnectionString("WinTaskManager")));
 
             services.AddSwaggerGen(c =>
             {
@@ -52,8 +56,7 @@ namespace WebAPI_App.Web
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
-        {
-
+        {            
 
             if (env.IsDevelopment())
             {
