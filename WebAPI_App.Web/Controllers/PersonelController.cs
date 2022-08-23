@@ -36,7 +36,7 @@ namespace WebAPI_App.Web.Controllers
         [HttpGet("{id}")]
         public JsonResult Get(string id)
         {
-            
+
             var person = _dataObject.Personel.FindByID(Guid.Parse(id));
 
             if (person == null) return new JsonResult(null);
