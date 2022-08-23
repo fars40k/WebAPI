@@ -25,20 +25,21 @@ namespace WebAPI_App.Web.Controllers
         {
             var list = _dataObject.Personel.FindAll();
 
-            foreach(Person item in list)
+            foreach (Person item in list)
             {
                 TrimPersonData(item);
             }
 
-            JsonResult jsonResult = new JsonResult(list);
-
-            return jsonResult;
+            return new JsonResult(list);
         }
 
         [HttpGet("{id}")]
         public JsonResult Get(string id)
         {
-            Person person = _dataObject.Personel.FindByID(Guid.Parse(id));
+            
+            var person = _dataObject.Personel.FindByID(Guid.Parse(id));
+
+            if (person == null) return new JsonResult(null);
 
             TrimPersonData(person);
 
@@ -82,11 +83,11 @@ namespace WebAPI_App.Web.Controllers
             foreach (Person item in list)
             {
                 TrimPersonData(item);
+                item.ProjectsWith = null;
+                item.GoalsWith = null;
             }
 
-            JsonResult jsonResult = new JsonResult(list);
-
-            return jsonResult;
+            return new JsonResult(list); 
         }
 
 
