@@ -25,6 +25,8 @@ namespace WebAPI_App.Web.Controllers
         {
             var list = _dataObject.Personel.FindAll();
 
+            if (list.Count() == 0) return new JsonResult(null);
+
             foreach (Person item in list)
             {
                 TrimPersonData(item);
@@ -36,41 +38,70 @@ namespace WebAPI_App.Web.Controllers
         [HttpGet("{id}")]
         public JsonResult Get(string id)
         {
+            try
+            {
+                var person = _dataObject.Personel.FindByID(Guid.Parse(id));
 
-            var person = _dataObject.Personel.FindByID(Guid.Parse(id));
+                if (person == null) return new JsonResult(null);
 
-            if (person == null) return new JsonResult(null);
+                TrimPersonData(person);
 
-            TrimPersonData(person);
+                return new JsonResult(person);
+            }
+            catch
+            {
 
-            return new JsonResult(person);
+                return new JsonResult(null) { StatusCode = 400 };
+
+            }
         }
 
         [HttpPost]
-        public void Update(Person newPerson)
+        public ActionResult Update(Person newPerson)
         {
-            if (_dataObject.Personel.FindByID(newPerson.PersonID) != null)
+            try
             {
-                // Updating existed entry
+                if (_dataObject.Personel.FindByID(newPerson.PersonID) != null)
+                {
+                    // Updating existed entry
 
-                _dataObject.Personel.Update(newPerson);
+                    _dataObject.Personel.Update(newPerson);
 
-            } else
+                }
+                else
+                {
+                    // Adding new entry
+
+                    _dataObject.Personel.Insert(newPerson);
+
+                }
+
+                return new JsonResult(null);
+            }
+            catch
             {
-                // Adding new entry
 
-                _dataObject.Personel.Insert(newPerson);
+                return new JsonResult(null) { StatusCode = 400 };
 
             }
         }
 
         [HttpDelete]
-        public void Delete(string id)
+        public ActionResult Delete(string id)
         {
-            if (_dataObject.Personel.FindByID(Guid.Parse(id)) != null)
+            try
             {
-                _dataObject.LinkedData.ClearLinksForPerson(Guid.Parse(id));
-                _dataObject.Personel.Delete(Guid.Parse(id));
+                if (_dataObject.Personel.FindByID(Guid.Parse(id)) != null)
+                {
+                    _dataObject.LinkedData.ClearLinksForPerson(Guid.Parse(id));
+                    _dataObject.Personel.Delete(Guid.Parse(id));
+                }
+
+                return new JsonResult(null);
+            }
+            catch
+            {
+                return new JsonResult(null) { StatusCode = 400 };
             }
         }
 
@@ -78,16 +109,55 @@ namespace WebAPI_App.Web.Controllers
         [HttpGet]
         public JsonResult GetForProject(string id)
         {
-            var list = _dataObject.LinkedData.FindPersonelForProject(Guid.Parse(id));
-
-            foreach (Person item in list)
+            try
             {
-                TrimPersonData(item);
-                item.ProjectsWith = null;
-                item.GoalsWith = null;
-            }
+                var list = _dataObject.LinkedData.FindPersonelForProject(Guid.Parse(id));
 
-            return new JsonResult(list); 
+                if (list.Count() == 0) return new JsonResult(null);
+
+                foreach (Person item in list)
+                {
+                    TrimPersonData(item);
+                    item.ProjectsWith = null;
+                    item.GoalsWith = null;
+                }
+
+                return new JsonResult(list);
+            }
+            catch
+            {
+
+                return new JsonResult(null) { StatusCode = 400 };
+
+            }
+        }
+
+        [Route("ForGoal/{id}")]
+        [HttpGet]
+        public JsonResult GetForGoal(string id)
+        {
+            try
+            {
+                var list = _dataObject.LinkedData.FindPersonelForGoal(Guid.Parse(id));
+
+                if (list.Count() == 0) return new JsonResult(null);
+
+                foreach (Person item in list)
+                {
+                    TrimPersonData(item);
+                    item.ProjectsWith = null;
+                    item.GoalsWith = null;
+                }
+
+                return new JsonResult(list);
+
+            }
+            catch
+            {
+
+                return new JsonResult(null) { StatusCode = 400 };
+
+            }
         }
 
 
