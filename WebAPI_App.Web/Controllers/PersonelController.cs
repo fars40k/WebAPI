@@ -19,7 +19,6 @@ namespace WebAPI_App.Web.Controllers
             _dataObject = dataAccessObject;
         }
 
-        // GET: api/personel
         [HttpGet]
         public JsonResult Get()
         {
@@ -42,7 +41,7 @@ namespace WebAPI_App.Web.Controllers
             {
                 var person = _dataObject.Personel.FindByID(Guid.Parse(id));
 
-                if (person == null) return new JsonResult(null);
+                if (person == null) return new JsonResult(null) { StatusCode = 404 };
 
                 TrimPersonData(person);
 
@@ -101,8 +100,15 @@ namespace WebAPI_App.Web.Controllers
             {
                 if (_dataObject.Personel.FindByID(Guid.Parse(id)) != null)
                 {
+
                     _dataObject.LinkedData.ClearLinksForPerson(Guid.Parse(id));
                     _dataObject.Personel.Delete(Guid.Parse(id));
+
+                } else
+                {
+
+                    return new JsonResult(null) { StatusCode = 404 };
+
                 }
 
                 return new JsonResult(null);

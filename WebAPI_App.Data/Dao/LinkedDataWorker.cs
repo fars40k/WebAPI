@@ -58,6 +58,8 @@ namespace WebAPI_App.Data
             var project = _context.Projects.Where(p => p.ProjectID.Equals(ProjectGUID)).FirstOrDefault<Project>();
             var goal = _context.Goals.Where(r => r.GoalID.Equals(GoalGUID)).FirstOrDefault<Goal>();
 
+            var projectGoals = _context.Goals.Include(p => p.ProjectsWith).ToList();
+
             Project projectDao = project;
             Goal goalDao = goal;
 
@@ -72,6 +74,9 @@ namespace WebAPI_App.Data
         {
             var project = _context.Projects.Where(p => p.ProjectID.Equals(ProjectGUID)).FirstOrDefault<Project>();
             var goal = _context.Goals.Where(r => r.GoalID.Equals(GoalGUID)).FirstOrDefault<Goal>();
+
+            var projectGoals = _context.Goals.Include(p => p.ProjectsWith).ToList();
+            var goalsProjects = _context.Projects.Include(p => p.GoalsIn).ToList();
 
             Project projectDao = project;
             Goal goalDao = goal;

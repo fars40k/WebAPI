@@ -19,7 +19,6 @@ namespace WebAPI_App.Web.Controllers
             _dataObject = dataAccessObject;
         }
 
-        // GET: api/projects
         [HttpGet]
         public JsonResult Get()
         {
@@ -42,7 +41,7 @@ namespace WebAPI_App.Web.Controllers
             {
                 var projects = _dataObject.Projects.FindByID(Guid.Parse(id));
 
-                if (projects == null) return new JsonResult(null);
+                if (projects == null) return new JsonResult(null) { StatusCode = 404 };
 
                 TrimProjectData(projects);
 
@@ -104,8 +103,15 @@ namespace WebAPI_App.Web.Controllers
             {
                 if (_dataObject.Projects.FindByID(Guid.Parse(id)) != null)
                 {
-                    _dataObject.LinkedData.ClearLinksForPerson(Guid.Parse(id));
+
                     _dataObject.Projects.Delete(Guid.Parse(id));
+
+                }
+                else
+                {
+
+                    return new JsonResult(null) { StatusCode = 404 };
+
                 }
 
                 return new JsonResult(null);
@@ -116,9 +122,9 @@ namespace WebAPI_App.Web.Controllers
             }
         }
 
-        [Route("AddTasks/{ProjectId}/{GoalId}")]
+        [Route("AddTaskTo/{ProjectId}/{GoalId}")]
         [HttpGet]
-        public JsonResult GetAddTasksToProject(string ProjectId, string GoalId)
+        public JsonResult GetAddTaskToProject(string ProjectId, string GoalId)
         {
             try
             {
@@ -135,9 +141,9 @@ namespace WebAPI_App.Web.Controllers
             }
         }
 
-        [Route("RemoveTasks/{ProjectId}/{GoalId}")]
+        [Route("RemoveTaskFrom/{ProjectId}/{GoalId}")]
         [HttpGet]
-        public JsonResult GetRemoveTasksFromProject(string ProjectId, string GoalId)
+        public JsonResult GetRemoveTaskFromProject(string ProjectId, string GoalId)
         {
             try
             {
@@ -152,7 +158,36 @@ namespace WebAPI_App.Web.Controllers
                 return new JsonResult(null) { StatusCode = 400 };
 
             }
-        }      
+        }
+
+        [Route("FindGoalsFor/{id}")]
+        [HttpGet]
+        public JsonResult GetForGoal(string id)
+        {
+            try
+            {
+                var list = _dataObject.LinkedData.FindGoalsForProject(Guid.Parse(id));
+
+                if (list.Count() == 0) return new JsonResult(null);
+
+                foreach (Goal item in list)
+                {
+                    
+                    item.ProjectsWith = null;
+                    item.PersonelWith = null;
+
+                }
+
+                return new JsonResult(list);
+
+            }
+            catch
+            {
+
+                return new JsonResult(null) { StatusCode = 400 };
+
+            }
+        }
 
         private void TrimProjectData(Project obj)
         {
