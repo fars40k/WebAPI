@@ -65,8 +65,16 @@ namespace WebAPI_App.Web.Controllers
                 {
                     // Updating existed entry
 
-                    _dataObject.Personel.Update(newPerson);
+                    Person found = _dataObject.Personel.FindByID(newPerson.PersonID);
+                    var s1 = _dataObject.LinkedData.CheckState(found);
+                    found.FirstName = newPerson.FirstName;
+                    found.SurName = newPerson.SurName;
+                    found.LastName = newPerson.LastName;
+                    found.Division = newPerson.Division;
+                    found.Occupation = newPerson.Occupation;
+                    _dataObject.LinkedData.MakeModifiedStatus(found);
 
+                    _dataObject.SaveChanges();
                 }
                 else
                 {
@@ -160,6 +168,43 @@ namespace WebAPI_App.Web.Controllers
             }
         }
 
+        [Route("Assign/{PersonId}/{ProjectId}")]
+        [HttpGet]
+        public JsonResult GetAssignToProject(string PersonId, string ProjectId)
+        {
+            try
+            {
+                _dataObject.LinkedData.AddPersonToProject(Guid.Parse(PersonId), Guid.Parse(ProjectId));
+                _dataObject.LinkedData.SaveChanges();
+                return new JsonResult(null);
+
+            }
+            catch
+            {
+
+                return new JsonResult(null) { StatusCode = 400 };
+
+            }
+        }
+
+        [Route("Unassign/{PersonId}/{ProjectId}")]
+        [HttpGet]
+        public JsonResult GetUnassignToProject(string PersonId, string ProjectId)
+        {
+            try
+            {
+                _dataObject.LinkedData.RemovePersonFromProject(Guid.Parse(PersonId), Guid.Parse(ProjectId));
+                _dataObject.LinkedData.SaveChanges();
+                return new JsonResult(null);
+
+            }
+            catch
+            {
+
+                return new JsonResult(null) { StatusCode = 400 };
+
+            }
+        }
 
         private void TrimPersonData(Person obj)
         {

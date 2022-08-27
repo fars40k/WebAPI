@@ -21,6 +21,8 @@ namespace WebAPI_App.Data
 
         public void AddPersonToProject(Guid PersonGUID, Guid ProjectGUID)
         {
+            var personelToProjects = _context.Personel.Include("ProjectsWith");
+
             var project = _context.Projects.Where(p => p.ProjectID.Equals(ProjectGUID)).FirstOrDefault<Project>();
             var person = _context.Personel.Where(r => r.PersonID.Equals(PersonGUID)).FirstOrDefault<Person>();
 
@@ -37,6 +39,8 @@ namespace WebAPI_App.Data
         {
             var project = _context.Projects.Where(p => p.ProjectID.Equals(ProjectGUID)).FirstOrDefault<Project>();
             var person = _context.Personel.Where(r => r.PersonID.Equals(PersonGUID)).FirstOrDefault<Person>();
+
+            var projectPersonel = _context.Personel.Include(p => p.ProjectsWith).ToList();
 
             Project projectDao = project;
             Person personDao = person;
