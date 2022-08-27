@@ -206,6 +206,44 @@ namespace WebAPI_App.Web.Controllers
             }
         }
 
+        [Route("Appoint/{PersonId}/{GoalId}")]
+        [HttpGet]
+        public JsonResult GetAppointToProject(string PersonId, string GoalId)
+        {
+            try
+            {
+                _dataObject.LinkedData.AddPersonToProject(Guid.Parse(PersonId), Guid.Parse(GoalId));
+                _dataObject.LinkedData.SaveChanges();
+                return new JsonResult(null);
+
+            }
+            catch
+            {
+
+                return new JsonResult(null) { StatusCode = 400 };
+
+            }
+        }
+
+        [Route("Dismiss/{PersonId}/{GoalId}")]
+        [HttpGet]
+        public JsonResult GetDismissToProject(string PersonId, string GoalId)
+        {
+            try
+            {
+                _dataObject.LinkedData.RemovePersonFromProject(Guid.Parse(PersonId), Guid.Parse(GoalId));
+                _dataObject.LinkedData.SaveChanges();
+                return new JsonResult(null);
+
+            }
+            catch
+            {
+
+                return new JsonResult(null) { StatusCode = 400 };
+
+            }
+        }
+
         private void TrimPersonData(Person obj)
         {
             obj.FirstName = obj.FirstName.TrimEnd();
