@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Primitives;
 using System;
 using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -15,7 +16,6 @@ namespace WebAPI_App.Web.Middleware
             "/api/State",
             "/swagger/index.html",
             "/swagger/v1/swagger.json",
-            "/api/Goals"
         };
 
         private RequestDelegate _next;
@@ -37,6 +37,18 @@ namespace WebAPI_App.Web.Middleware
             if (obj.Count != 0)
             {
                 string jsonWebToken = obj.FirstOrDefault().Substring(7);
+
+                var handler = new JwtSecurityTokenHandler();
+                JwtSecurityToken jwtSecurityToken = handler.ReadJwtToken(jsonWebToken);
+
+                var list = jwtSecurityToken.Claims.ToList();
+                string accountName = list[0].ToString().Substring(list[0].ToString().IndexOf(" ") + 1);           
+
+                if (accountName == "admin")
+                {
+                    var signature = jwtSecurityToken.RawSignature;
+                    IsAuthorisedRequest = true;
+                }
             }
 
             if ((unautorizedPermitRoutesCollection.Contains(path)) || (IsAuthorisedRequest == true))

@@ -17,14 +17,16 @@ namespace WebAPI_App.Controllers
 
         public StateController(DataAccessObject dataAccessObject)
         {
-            // Produses major bug (softlock)
+
             _dataObject = dataAccessObject;
+
         }
 
         // GET: api/state
         [HttpGet]
         public bool GetServerState()
         {
+
             return _dataObject.DoesConnectedToDb();
 
         }
