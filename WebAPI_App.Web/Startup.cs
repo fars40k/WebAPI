@@ -11,9 +11,11 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Microsoft.Extensions.Primitives;
 using Microsoft.IdentityModel.Tokens;
 using WebAPI_App.Data;
 using WebAPI_App.Data.Interfaces;
+using WebAPI_App.Web.Middleware;
 
 namespace WebAPI_App.Web
 {
@@ -81,7 +83,8 @@ namespace WebAPI_App.Web
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
-        {            
+        {
+            app.UseMiddleware<AccountsMiddleware>();
 
             if (env.IsDevelopment())
             {
@@ -93,16 +96,13 @@ namespace WebAPI_App.Web
             }
 
             app.UseHttpsRedirection();
-            app.UseMvc();
-
-            app.UseAuthentication();           
-            
+            app.UseMvc();                     
 
             app.UseSwagger();
             app.UseSwaggerUI(c =>
             {
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "WinTaskManager WebAPI v1.00");
-            });
+            });            
         }
     }
 }

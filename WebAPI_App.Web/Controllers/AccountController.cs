@@ -16,7 +16,7 @@ namespace WebAPI_App.Web.Controllers
     {
         private List<Account> accounts = new List<Account>
         {
-            new Account {Login="admin", Password="12345"}
+            new Account {Login="admin", Password="12345", Role="Admin"}
         };
 
         [HttpPost("/token")]
@@ -76,5 +76,6 @@ namespace WebAPI_App.Web.Controllers
     {
         public string Login { get; set; }
         public string Password { get; set; }
+        public string Role { get; set; }
     }
 }

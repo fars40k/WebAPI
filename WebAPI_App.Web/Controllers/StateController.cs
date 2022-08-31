@@ -17,6 +17,7 @@ namespace WebAPI_App.Controllers
 
         public StateController(DatabaseWorker worker)
         {
+            // Produses major bug (softlock)
             DatabaseWorker = worker;            
         }
 

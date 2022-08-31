@@ -21,7 +21,7 @@ namespace WebAPI_App.Web.Controllers
             _dataObject = dataAccessObject;
         }
 
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [HttpGet]
         public JsonResult Get()
         {
