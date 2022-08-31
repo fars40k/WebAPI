@@ -1,4 +1,5 @@
-﻿using WebAPI_App.Data.Interfaces;
+﻿using System;
+using WebAPI_App.Data.Interfaces;
 
 namespace WebAPI_App.Data
 {
@@ -14,12 +15,30 @@ namespace WebAPI_App.Data
         public LinkedDataWorker LinkedData;
 
         public DataAccessObject(WinTaskContext context)
-        {
+        {         
             wtContext = context;
+
+            wtContext.Database.CreateIfNotExists();
+            wtContext.Database.Connection.Open();
 
             UpdateContextInRepositories();
             UpdateEntityModel();
         }     
+
+        public bool DoesConnectedToDb()
+        {
+            try
+            {
+                wtContext.Database.Connection.Close();
+                wtContext.Database.Connection.Open();
+                
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
 
         public void UpdateEntityModel()
         {

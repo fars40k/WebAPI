@@ -14,7 +14,8 @@ namespace WebAPI_App.Web.Middleware
             "/token",
             "/api/State",
             "/swagger/index.html",
-            "/swagger/v1/swagger.json"
+            "/swagger/v1/swagger.json",
+            "/api/Goals"
         };
 
         private RequestDelegate _next;

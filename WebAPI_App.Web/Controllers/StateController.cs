@@ -13,20 +13,20 @@ namespace WebAPI_App.Controllers
     [ApiController]
     public class StateController : ControllerBase
     {
-        public DatabaseWorker DatabaseWorker;
+        private DataAccessObject _dataObject;
 
-        public StateController(DatabaseWorker worker)
+        public StateController(DataAccessObject dataAccessObject)
         {
             // Produses major bug (softlock)
-            DatabaseWorker = worker;            
+            _dataObject = dataAccessObject;
         }
 
         // GET: api/state
         [HttpGet]
         public bool GetServerState()
         {
-            return DatabaseWorker.IsConnectionEstablished;
-        }
+            return _dataObject.DoesConnectedToDb();
 
+        }
     }
 }
