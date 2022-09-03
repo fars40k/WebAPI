@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Threading.Tasks;
+using WebAPI_App.Data;
 
 namespace WebAPI_App.Web.Middleware
 {
@@ -20,8 +21,11 @@ namespace WebAPI_App.Web.Middleware
         };
 
         private RequestDelegate _next;
-        public AccountsMiddleware(RequestDelegate next)
+
+        public AccountsMiddleware(RequestDelegate next, DataAccessObject obj)
         {
+            //Creates singleton DataAccessObject with initial time delay
+
             _next = next;
         }
 

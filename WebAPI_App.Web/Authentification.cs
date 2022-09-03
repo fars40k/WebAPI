@@ -12,6 +12,7 @@ namespace WebAPI_App.Web
         public static Dictionary<string, string> _accountTokens = new Dictionary<string, string>();
 
         const string KEY = "secretkey!123_494473330";
+
         public static SymmetricSecurityKey GetSymmetricSecurityKey()
         {
             return new SymmetricSecurityKey(Encoding.ASCII.GetBytes(KEY));

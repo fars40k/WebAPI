@@ -30,5 +30,6 @@ namespace WebAPI_App.Controllers
             return _dataObject.DoesConnectedToDb();
 
         }
+
     }
 }
