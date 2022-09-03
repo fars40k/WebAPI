@@ -44,7 +44,7 @@ namespace WebAPI_App.Web.Middleware
                 var list = jwtSecurityToken.Claims.ToList();
                 string accountName = list[0].ToString().Substring(list[0].ToString().IndexOf(" ") + 1);
 
-                if (AuthOptions.AccountTokens[accountName] != null)
+                if (AuthOptions.AccountTokens.ContainsKey(accountName))
                 {
                     if (AuthOptions.AccountTokens[accountName] == jsonWebToken)
                     {

@@ -46,14 +46,16 @@ namespace WebAPI_App.Web.Controllers
                 username = identity.Name
             };
 
-            if (AuthOptions.AccountTokens[username] == null)
+            if (AuthOptions.AccountTokens.ContainsKey(username))
+            {
+
+                AuthOptions.AccountTokens[username] = encodedJwt;
+
+            } else
             {
 
                 AuthOptions.AccountTokens.Add(username, encodedJwt);
 
-            } else
-            {
-                AuthOptions.AccountTokens[username] = encodedJwt;
             }
 
             return new JsonResult(response);
