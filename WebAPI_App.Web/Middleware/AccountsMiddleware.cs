@@ -12,7 +12,7 @@ namespace WebAPI_App.Web.Middleware
     {
         public readonly List<string> unautorizedPermitRoutesCollection = new List<string>()
         {
-            "/token",
+            "/SignIn",
             "/api/State",
             "/swagger/index.html",
             "/swagger/v1/swagger.json",
@@ -42,12 +42,16 @@ namespace WebAPI_App.Web.Middleware
                 JwtSecurityToken jwtSecurityToken = handler.ReadJwtToken(jsonWebToken);
 
                 var list = jwtSecurityToken.Claims.ToList();
-                string accountName = list[0].ToString().Substring(list[0].ToString().IndexOf(" ") + 1);           
+                string accountName = list[0].ToString().Substring(list[0].ToString().IndexOf(" ") + 1);
 
-                if (accountName == "admin")
+                if (AuthOptions.AccountTokens[accountName] != null)
                 {
-                    var signature = jwtSecurityToken.RawSignature;
-                    IsAuthorisedRequest = true;
+                    if (AuthOptions.AccountTokens[accountName] == jsonWebToken)
+                    {
+                        var signature = jwtSecurityToken.RawSignature;
+                        IsAuthorisedRequest = true;
+                    }
+
                 }
             }
 

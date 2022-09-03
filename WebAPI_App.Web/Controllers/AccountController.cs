@@ -19,8 +19,8 @@ namespace WebAPI_App.Web.Controllers
             new Account {Login="admin", Password="12345", Role="Admin"}
         };
 
-        [HttpPost("/token")]
-        public IActionResult Token(string username, string password)
+        [HttpPost("/SignIn")]
+        public IActionResult SignIn(string username, string password)
         {
             var identity = GetIdentity(username, password);
             if (identity == null)
@@ -46,10 +46,44 @@ namespace WebAPI_App.Web.Controllers
                 username = identity.Name
             };
 
+            if (AuthOptions.AccountTokens[username] == null)
+            {
+
+                AuthOptions.AccountTokens.Add(username, encodedJwt);
+
+            } else
+            {
+                AuthOptions.AccountTokens[username] = encodedJwt;
+            }
+
             return new JsonResult(response);
 
         }
 
+        [HttpPost("/Register")]
+        public IActionResult Register(string username, string password)
+        {
+            accounts.Add(new Account() { Login = username, Password = password, Role = "User" });
+
+            return new JsonResult(null) { StatusCode = 201 };
+        }
+
+        [HttpPost("/Grant")]
+        public IActionResult Grant(string username, string newRole)
+        {
+            if (accounts.Exists(x => x.Login == username))
+            {
+                var account = accounts.Find(x => x.Login == username);
+                account.Role = newRole;
+
+                return new JsonResult(null) { StatusCode = 202 };
+
+            } else
+            {
+                return new JsonResult(null) { StatusCode = 404 };
+            }
+            
+        }
 
         private ClaimsIdentity GetIdentity(string username, string password)
         {

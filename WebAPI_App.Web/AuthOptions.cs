@@ -9,6 +9,8 @@ namespace WebAPI_App.Web
 {
     public class AuthOptions
     {
+        public static Dictionary<string, string> AccountTokens = new Dictionary<string, string>();
+
         public const string ISSUER = "WebAPI"; 
         public const string AUDIENCE = "Win_Dev"; 
         const string KEY = "secretkey!123_494473330";
