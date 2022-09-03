@@ -6,7 +6,9 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
+using WebAPI_App.Web.Middleware;
 
 namespace WebAPI_App.Web.Controllers
 {
@@ -14,10 +16,17 @@ namespace WebAPI_App.Web.Controllers
     [ApiController]
     public class AccountController : ControllerBase
     {
+        private IConfiguration _configuration;
+
         private List<Account> accounts = new List<Account>
         {
             new Account {Login="admin", Password="12345", Role="Admin"}
         };
+
+        public AccountController(IConfiguration configuration)
+        {
+            _configuration = configuration;
+        }
 
         [HttpPost("/SignIn")]
         public IActionResult SignIn(string username, string password)
@@ -31,12 +40,12 @@ namespace WebAPI_App.Web.Controllers
             var now = DateTime.UtcNow;
 
             var jwt = new JwtSecurityToken(
-                    issuer: AuthOptions.ISSUER,
-                    audience: AuthOptions.AUDIENCE,
+                    issuer: _configuration["AppSettings:JWT_issuer"],
+                    audience: _configuration["AppSettings:JWT_audience"],
                     notBefore: now,
                     claims: identity.Claims,
-                    expires: now.Add(TimeSpan.FromMinutes(AuthOptions.LIFETIME)),
-                    signingCredentials: new SigningCredentials(AuthOptions.GetSymmetricSecurityKey(), SecurityAlgorithms.HmacSha256));
+                    expires: now.Add(TimeSpan.FromMinutes(Double.Parse(_configuration["AppSettings:JWT_lifetime"]))),
+                    signingCredentials: new SigningCredentials(Authentification.GetSymmetricSecurityKey(), SecurityAlgorithms.HmacSha256));
 
             var encodedJwt = new JwtSecurityTokenHandler().WriteToken(jwt);
 
@@ -46,15 +55,15 @@ namespace WebAPI_App.Web.Controllers
                 username = identity.Name
             };
 
-            if (AuthOptions.AccountTokens.ContainsKey(username))
+            if (Authentification._accountTokens.ContainsKey(username))
             {
 
-                AuthOptions.AccountTokens[username] = encodedJwt;
+                Authentification._accountTokens[username] = encodedJwt;
 
             } else
             {
 
-                AuthOptions.AccountTokens.Add(username, encodedJwt);
+                Authentification._accountTokens.Add(username, encodedJwt);
 
             }
 

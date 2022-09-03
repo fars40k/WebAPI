@@ -9,7 +9,8 @@ using System.Threading.Tasks;
 namespace WebAPI_App.Web.Middleware
 {
     public class AccountsMiddleware
-    {
+    {    
+
         public readonly List<string> unautorizedPermitRoutesCollection = new List<string>()
         {
             "/SignIn",
@@ -44,9 +45,9 @@ namespace WebAPI_App.Web.Middleware
                 var list = jwtSecurityToken.Claims.ToList();
                 string accountName = list[0].ToString().Substring(list[0].ToString().IndexOf(" ") + 1);
 
-                if (AuthOptions.AccountTokens.ContainsKey(accountName))
+                if (Authentification._accountTokens.ContainsKey(accountName))
                 {
-                    if (AuthOptions.AccountTokens[accountName] == jsonWebToken)
+                    if (Authentification._accountTokens[accountName] == jsonWebToken)
                     {
                         var signature = jwtSecurityToken.RawSignature;
                         IsAuthorisedRequest = true;
