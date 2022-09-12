@@ -141,9 +141,9 @@ namespace WebAPI_App.Data
             }
         }
 
-        public IEnumerable<Person> FindAllPersonelWithLinks()
+        public Person FindPersonWithLinks(Guid id)
         {
-            return _context.Personel.Include(p => p.GoalsWith.Select(w => w.ProjectsWith));
+            return _context.Personel.Where(p => p.PersonID.Equals(id)).Include("PersonelWith").Include("GoalsWith").FirstOrDefault();
         }
 
         public IEnumerable<Person> FindPersonelForProject(Guid ProjectID)

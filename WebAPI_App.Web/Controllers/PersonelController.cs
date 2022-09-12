@@ -54,7 +54,7 @@ namespace WebAPI_App.Web.Controllers
 
             }
         }
-
+        
         [HttpPost]
         public ActionResult Update(Person newPerson)
         {
@@ -64,7 +64,7 @@ namespace WebAPI_App.Web.Controllers
                 {
                     // Updating existed entry
 
-                    Person found = _dataObject.Personel.FindByID(newPerson.PersonID);
+                    Person found = _dataObject.LinkedData.FindPersonWithLinks(newPerson.PersonID);
                     var s1 = _dataObject.LinkedData.CheckState(found);
                     found.FirstName = newPerson.FirstName;
                     found.SurName = newPerson.SurName;
