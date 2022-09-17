@@ -143,7 +143,12 @@ namespace WebAPI_App.Data
 
         public Person FindPersonWithLinks(Guid id)
         {
-            return _context.Personel.Where(p => p.PersonID.Equals(id)).Include("PersonelWith").Include("GoalsWith").FirstOrDefault();
+            Person person = _context.Personel.Where(p => p.PersonID == id).Include("ProjectsWith").FirstOrDefault();
+            _context.Entry(person).Collection("ProjectsWith").Load();
+
+            var a = _context.Personel.Include(p => p.ProjectsWith).ToList();
+
+            return person;
         }
 
         public IEnumerable<Person> FindPersonelForProject(Guid ProjectID)

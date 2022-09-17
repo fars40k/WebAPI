@@ -60,20 +60,20 @@ namespace WebAPI_App.Web.Controllers
         {
             try
             {
+
                 if (_dataObject.Personel.FindByID(newPerson.PersonID) != null)
                 {
-                    // Updating existed entry
+                    // Updating existing entry
 
                     Person found = _dataObject.LinkedData.FindPersonWithLinks(newPerson.PersonID);
-                    var s1 = _dataObject.LinkedData.CheckState(found);
+
                     found.FirstName = newPerson.FirstName;
                     found.SurName = newPerson.SurName;
                     found.LastName = newPerson.LastName;
                     found.Division = newPerson.Division;
                     found.Occupation = newPerson.Occupation;
-                    _dataObject.LinkedData.MakeModifiedStatus(found);
 
-                    _dataObject.SaveChanges();
+                    _dataObject.Personel.SaveChanges();
                 }
                 else
                 {
@@ -85,7 +85,7 @@ namespace WebAPI_App.Web.Controllers
 
                 return new JsonResult(null);
             }
-            catch
+            catch (Exception ex)
             {
 
                 return new JsonResult(null) { StatusCode = 400 };
