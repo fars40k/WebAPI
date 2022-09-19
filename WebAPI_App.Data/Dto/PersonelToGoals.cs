@@ -1,10 +1,11 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace WebAPI_App.Data.Dto
 {
     class PersonelToGoals
     {
-        public Guid PersonID { get; set; }        
+        public Guid PersonID { get; set; }
         public Guid GoalID { get; set; }
 
         public virtual Person Person { get; set; }

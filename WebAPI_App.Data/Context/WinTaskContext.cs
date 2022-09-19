@@ -8,6 +8,8 @@ namespace WebAPI_App.Data
         public WinTaskContext(string connectionString)
             : base(connectionString)
         {
+
+           this.Database.Log = ((s) => DataAccessObject.Log.Add(s));
         }
 
         public WinTaskContext()

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using WebAPI_App.Data.Interfaces;
 
 namespace WebAPI_App.Data
@@ -8,6 +9,8 @@ namespace WebAPI_App.Data
     /// </summary>
     public class DataAccessObject : IDataAccessService
     {
+        public static List<string> Log = new List<string>();
+
         public WinTaskContext wtContext;
         public IRepository<Person> Personel;
         public IRepository<Project> Projects;
@@ -44,10 +47,7 @@ namespace WebAPI_App.Data
         {
 
             Personel.FindAll();
-            var personelToProjects = wtContext.Personel.Include("ProjectsWith");
-            var personelToGoals = wtContext.Personel.Include("GoalsWith");
-            var goalsToProjects = wtContext.Goals.Include("ProjectsWith");
-
+            
         }
 
         public void SaveChanges()
