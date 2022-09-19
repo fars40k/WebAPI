@@ -9,8 +9,6 @@ namespace WebAPI_App.Data
     /// </summary>
     public class DataAccessObject : IDataAccessService
     {
-        public static List<string> Log = new List<string>();
-
         public WinTaskContext wtContext;
         public IRepository<Person> Personel;
         public IRepository<Project> Projects;

@@ -143,18 +143,8 @@ namespace WebAPI_App.Data
 
         public Person FindPersonWithLinks(Guid id)
         {
-            // Code for testing 
 
             Person person = _context.Personel.Where(p => p.PersonID == id).Include("ProjectsWith").FirstOrDefault();
-            _context.Entry(person).Collection("ProjectsWith").Load();
-
-            List<Project> projects = _context.Projects.Include(p => p.PersonelWith).ToList();
-            List<Person> personel1 = _context.Personel.Include(p => p.ProjectsWith).ToList();
-            List<Goal> goals = _context.Goals.ToList();
-
-            var look = DataAccessObject.Log;
-
-            var a = _context.Personel.Include(p => p.ProjectsWith).ToList();
 
             return person;
         }

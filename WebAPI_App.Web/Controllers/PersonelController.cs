@@ -81,6 +81,7 @@ namespace WebAPI_App.Web.Controllers
 
                     _dataObject.Personel.Insert(newPerson);
 
+                    _dataObject.Personel.SaveChanges();
                 }
 
                 return new JsonResult(null);
@@ -132,8 +133,6 @@ namespace WebAPI_App.Web.Controllers
                 foreach (Person item in list)
                 {
                     TrimPersonData(item);
-                    item.ProjectsWith = null;
-                    item.GoalsWith = null;
                 }
 
                 return new JsonResult(list);
@@ -159,8 +158,6 @@ namespace WebAPI_App.Web.Controllers
                 foreach (Person item in list)
                 {
                     TrimPersonData(item);
-                    item.ProjectsWith = null;
-                    item.GoalsWith = null;
                 }
 
                 return new JsonResult(list);

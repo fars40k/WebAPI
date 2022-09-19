@@ -173,8 +173,6 @@ namespace WebAPI_App.Web.Controllers
                 foreach (Goal item in list)
                 {
                     
-                    item.ProjectsWith = null;
-                    item.PersonelWith = null;
 
                 }
 
