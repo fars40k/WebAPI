@@ -17,6 +17,7 @@ namespace WebAPI_App.Web.Middleware
             "/SignIn",
             "/api/State",
             "/swagger/index.html",
+            "//swagger/index.html",
             "/swagger/v1/swagger.json",
         };
 
