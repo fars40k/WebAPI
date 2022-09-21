@@ -31,7 +31,9 @@ namespace WebAPI_App.Web.Controllers
                 TrimProjectData(item);
             }
 
-            return new JsonResult(list);
+            var humbleList = MakeHumbleList(list);
+
+            return new JsonResult(humbleList);
         }
 
         [HttpGet("{id}")]
@@ -66,7 +68,6 @@ namespace WebAPI_App.Web.Controllers
 
                     Project found = _dataObject.Projects.FindByID(newProject.ProjectID);
 
-                    var s1 = _dataObject.LinkedData.CheckState(found);
                     found.Name = newProject.Name;
                     found.Description = newProject.Description;
                     found.CreationDate = newProject.CreationDate;
@@ -160,37 +161,37 @@ namespace WebAPI_App.Web.Controllers
             }
         }
 
-        [Route("FindGoalsFor/{id}")]
-        [HttpGet]
-        public JsonResult GetForGoal(string id)
-        {
-            try
-            {
-                var list = _dataObject.LinkedData.FindGoalsForProject(Guid.Parse(id));
-
-                if (list.Count() == 0) return new JsonResult(null);
-
-                foreach (Goal item in list)
-                {
-                    
-
-                }
-
-                return new JsonResult(list);
-
-            }
-            catch
-            {
-
-                return new JsonResult(null) { StatusCode = 400 };
-
-            }
-        }
-
+        // Trimming fields of the parameter object
         private void TrimProjectData(Project obj)
         {
             obj.Name= obj.Name.TrimEnd();
             obj.Description = obj.Description.Trim();
+        }
+
+        // Returns a copy of the parameter list without the navigation property collections
+        private List<Project> MakeHumbleList(IEnumerable<Project> forCloning)
+        {
+            List<Project> outList = new List<Project>();
+
+            foreach (Project item in forCloning)
+            {
+                Project cloned = new Project();
+
+                cloned.ProjectID = item.ProjectID;
+                cloned.Name = item.Name;
+                cloned.Description = item.Description;
+                cloned.CreationDate = item.CreationDate;
+                cloned.ExpireDate = item.ExpireDate;
+                cloned.Percentage = item.Percentage;
+                cloned.StatusKey = item.StatusKey;
+                cloned.GoalsIn = null;
+                cloned.PersonelWith = null;
+
+                outList.Add(cloned);
+            }
+
+            return outList;
+
         }
     }
 }

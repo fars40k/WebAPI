@@ -31,6 +31,8 @@ namespace WebAPI_App.Web.Controllers
                 TrimPersonData(item);
             }
 
+            var humbleList = MakeHumbleList(list);
+
             return new JsonResult(list);
         }
 
@@ -132,10 +134,12 @@ namespace WebAPI_App.Web.Controllers
 
                 foreach (Person item in list)
                 {
-                    TrimPersonData(item);
+                    TrimPersonData(item);       
                 }
 
-                return new JsonResult(list);
+                var humbleList = MakeHumbleList(list);
+
+                return new JsonResult(humbleList);
             }
             catch
             {
@@ -160,7 +164,9 @@ namespace WebAPI_App.Web.Controllers
                     TrimPersonData(item);
                 }
 
-                return new JsonResult(list);
+                var humbleList = MakeHumbleList(list);
+
+                return new JsonResult(humbleList);
 
             }
             catch
@@ -247,6 +253,7 @@ namespace WebAPI_App.Web.Controllers
             }
         }
 
+        // Trimming fields of the parameter object
         private void TrimPersonData(Person obj)
         {
             obj.FirstName = obj.FirstName.TrimEnd();
@@ -254,6 +261,31 @@ namespace WebAPI_App.Web.Controllers
             obj.LastName = obj.LastName.Trim();
             obj.Division = obj.Division.Trim();
             obj.Occupation = obj.Occupation.Trim();
+        }
+
+        // Returns a copy of the parameter list without the navigation property collections
+        private List<Person> MakeHumbleList(IEnumerable<Person> forCloning)
+        {
+            List<Person> outList = new List<Person>();
+
+            foreach (Person item in forCloning)
+            {
+                Person cloned = new Person();
+
+                cloned.PersonID = item.PersonID;
+                cloned.FirstName = item.FirstName;
+                cloned.SurName = item.SurName;
+                cloned.LastName = item.LastName;
+                cloned.Division = item.Division;
+                cloned.Occupation = item.Occupation;
+                cloned.ProjectsWith = null;
+                cloned.GoalsWith = null;
+
+                outList.Add(cloned);
+            }
+
+            return outList;
+
         }
     }
 }
