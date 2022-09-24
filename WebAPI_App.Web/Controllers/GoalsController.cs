@@ -36,7 +36,7 @@ namespace WebAPI_App.Web.Controllers
 
             var humbleList = MakeHumbleList(list);
 
-            return new JsonResult(list);
+            return new JsonResult(humbleList);
         }
 
         [HttpGet("{id}")]
@@ -149,7 +149,7 @@ namespace WebAPI_App.Web.Controllers
 
                 var humbleList = MakeHumbleList(list);
 
-                return new JsonResult(list);
+                return new JsonResult(humbleList);
 
             }
             catch
