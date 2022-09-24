@@ -57,8 +57,15 @@ namespace WebAPI_App.Web.Controllers
             }
         }
 
-        [HttpPost]
+        [HttpPut]
         public ActionResult Update(Project newProject)
+        {
+            return this.Insert(newProject);
+        }
+
+
+        [HttpPost]
+        public ActionResult Insert(Project newProject)
         {
             try
             {
@@ -102,8 +109,14 @@ namespace WebAPI_App.Web.Controllers
         {
             try
             {
-                if (_dataObject.Projects.FindByID(Guid.Parse(id)) != null)
+                Project projectForDeletion = _dataObject.Projects.FindByID(Guid.Parse(id));
+
+                if (projectForDeletion != null)
                 {
+                    foreach (Goal item in projectForDeletion.GoalsIn)
+                    {
+                        _dataObject.Goals.Delete(Guid.Parse(id));
+                    }
 
                     _dataObject.Projects.Delete(Guid.Parse(id));
 

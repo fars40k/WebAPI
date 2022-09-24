@@ -60,8 +60,14 @@ namespace WebAPI_App.Web.Controllers
             }
         }
 
-        [HttpPost]
+        [HttpPut]
         public ActionResult Update(Goal newGoal)
+        {
+            return this.Insert(newGoal);
+        }
+
+        [HttpPost]
+        public ActionResult Insert(Goal newGoal)
         {
             try
             {
@@ -126,7 +132,7 @@ namespace WebAPI_App.Web.Controllers
             }
         }
 
-        [Route("FindForProject/{id}")]
+        [Route("ForProject/{id}")]
         [HttpGet]
         public JsonResult GetForGoal(string id)
         {

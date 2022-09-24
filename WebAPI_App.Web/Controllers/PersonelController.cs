@@ -56,9 +56,16 @@ namespace WebAPI_App.Web.Controllers
 
             }
         }
-        
-        [HttpPost]
+
+        [HttpPut]
         public ActionResult Update(Person newPerson)
+        {
+            return this.Insert(newPerson);
+        }
+
+
+        [HttpPost]
+        public ActionResult Insert(Person newPerson)
         {
             try
             {
@@ -203,6 +210,13 @@ namespace WebAPI_App.Web.Controllers
             try
             {
                 _dataObject.LinkedData.RemovePersonFromProject(Guid.Parse(PersonId), Guid.Parse(ProjectId));
+                var list = _dataObject.LinkedData.FindGoalsForProject(Guid.Parse(ProjectId));
+
+                foreach(Goal item in list)
+                {
+                    _dataObject.LinkedData.RemovePersonFromProject(Guid.Parse(PersonId), Guid.Parse(item.GoalID.ToString()));
+                }
+
                 _dataObject.LinkedData.SaveChanges();
                 return new JsonResult(null);
 
