@@ -113,12 +113,20 @@ namespace WebAPI_App.Web.Controllers
 
                 if (projectForDeletion != null)
                 {
+                    var list = new List<Guid>();
+                    
                     foreach (Goal item in projectForDeletion.GoalsIn)
                     {
-                        _dataObject.Goals.Delete(Guid.Parse(id));
+                        list.Add(item.GoalID);
+                    }
+
+                    foreach (Guid item in list)
+                    {
+                        _dataObject.Goals.Delete(item);
                     }
 
                     _dataObject.Projects.Delete(Guid.Parse(id));
+                    _dataObject.LinkedData.SaveChanges();
 
                 }
                 else
@@ -174,14 +182,18 @@ namespace WebAPI_App.Web.Controllers
             }
         }
 
-        // Trimming fields of the parameter object
+        /// <summary>
+        /// Trimming fields of the parameter object
+        /// </summary>
         private void TrimProjectData(Project obj)
         {
             obj.Name= obj.Name.TrimEnd();
             obj.Description = obj.Description.Trim();
         }
 
-        // Returns a copy of the parameter list without the navigation property collections
+        /// <summary>
+        ///  Returns a copy of the parameter list without the navigation property collections
+        /// </summary>
         private List<Project> MakeHumbleList(IEnumerable<Project> forCloning)
         {
             List<Project> outList = new List<Project>();

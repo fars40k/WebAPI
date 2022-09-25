@@ -235,7 +235,7 @@ namespace WebAPI_App.Web.Controllers
         {
             try
             {
-                _dataObject.LinkedData.AddPersonToProject(Guid.Parse(PersonId), Guid.Parse(GoalId));
+                _dataObject.LinkedData.AddPersonToGoal(Guid.Parse(PersonId), Guid.Parse(GoalId));
                 _dataObject.LinkedData.SaveChanges();
                 return new JsonResult(null);
 
@@ -254,7 +254,7 @@ namespace WebAPI_App.Web.Controllers
         {
             try
             {
-                _dataObject.LinkedData.RemovePersonFromProject(Guid.Parse(PersonId), Guid.Parse(GoalId));
+                _dataObject.LinkedData.RemovePersonFromGoal(Guid.Parse(PersonId), Guid.Parse(GoalId));
                 _dataObject.LinkedData.SaveChanges();
                 return new JsonResult(null);
 
@@ -267,7 +267,10 @@ namespace WebAPI_App.Web.Controllers
             }
         }
 
-        // Trimming fields of the parameter object
+
+        /// <summary>
+        /// Trimming fields of the parameter object
+        /// </summary>
         private void TrimPersonData(Person obj)
         {
             obj.FirstName = obj.FirstName.TrimEnd();
@@ -277,7 +280,10 @@ namespace WebAPI_App.Web.Controllers
             obj.Occupation = obj.Occupation.Trim();
         }
 
-        // Returns a copy of the parameter list without the navigation property collections
+
+        /// <summary>
+        ///  Returns a copy of the parameter list without the navigation property collections
+        /// </summary>
         private List<Person> MakeHumbleList(IEnumerable<Person> forCloning)
         {
             List<Person> outList = new List<Person>();

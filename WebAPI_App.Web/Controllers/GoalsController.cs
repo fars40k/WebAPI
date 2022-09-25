@@ -160,14 +160,18 @@ namespace WebAPI_App.Web.Controllers
             }
         }
 
-        // Trimming fields of the parameter object
+        /// <summary>
+        /// Trimming fields of the parameter object
+        /// </summary>
         private void TrimGoalData(Goal obj)
         {
             obj.Name = obj.Name.TrimEnd();
             obj.Description = obj.Description.Trim();
         }
 
-        // Returns a copy of the parameter list without the navigation property collections
+        /// <summary>
+        ///  Returns a copy of the parameter list without the navigation property collections
+        /// </summary>
         private List<Goal> MakeHumbleList(IEnumerable<Goal> forCloning)
         {
             List<Goal> outList = new List<Goal>();
