@@ -14,6 +14,7 @@ namespace WebAPI_App.Data
         public IRepository<Project> Projects;
         public IRepository<Goal> Goals;
         public LinkedDataWorker LinkedData;
+        public CredentialsWorker Credentials;
 
         public DataAccessObject(WinTaskContext context)
         {         
@@ -22,7 +23,7 @@ namespace WebAPI_App.Data
             wtContext.Database.CreateIfNotExists();
             wtContext.Database.Connection.Open();
 
-            UpdateContextInRepositories();
+            UpdateContext();
             UpdateEntityModel();
         }     
 
@@ -52,16 +53,17 @@ namespace WebAPI_App.Data
         {
             Personel.SaveChanges();
 
-            UpdateContextInRepositories();
+            UpdateContext();
         }
 
-        public void UpdateContextInRepositories()
+        public void UpdateContext()
         { 
 
             Personel = new BaseRepository<Person>(wtContext);
             Projects = new BaseRepository<Project>(wtContext);
             Goals = new BaseRepository<Goal>(wtContext);
             LinkedData = new LinkedDataWorker(wtContext);
+            Credentials = new CredentialsWorker(wtContext);
 
         }
 

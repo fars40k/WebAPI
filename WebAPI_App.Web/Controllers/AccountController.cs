@@ -3,11 +3,14 @@ using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
+using System.Security.Cryptography;
+using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
+using WebAPI_App.Data;
 using WebAPI_App.Web.Middleware;
 
 namespace WebAPI_App.Web.Controllers
@@ -16,15 +19,17 @@ namespace WebAPI_App.Web.Controllers
     [ApiController]
     public class AccountController : ControllerBase
     {
+        private DataAccessObject _dataAccessObject;
         private IConfiguration _configuration;
 
-        private List<Account> accounts = new List<Account>
+        private List<string> roles = new List<string>
         {
-            new Account {Login="admin", Password="12345", Role="Admin"}
+            "Admin"
         };
 
-        public AccountController(IConfiguration configuration)
+        public AccountController(DataAccessObject dataAccessObject, IConfiguration configuration)
         {
+            _dataAccessObject = dataAccessObject;
             _configuration = configuration;
         }
 
@@ -43,7 +48,6 @@ namespace WebAPI_App.Web.Controllers
                     issuer: _configuration["AppSettings:JWT_issuer"],
                     audience: _configuration["AppSettings:JWT_audience"],
                     notBefore: now,
-                    claims: identity.Claims,
                     expires: now.Add(TimeSpan.FromMinutes(Double.Parse(_configuration["AppSettings:JWT_lifetime"]))),
                     signingCredentials: new SigningCredentials(Authentification.GetSymmetricSecurityKey(), SecurityAlgorithms.HmacSha256));
 
@@ -74,54 +78,50 @@ namespace WebAPI_App.Web.Controllers
         [HttpPost("/Register")]
         public IActionResult Register(string username, string password)
         {
-            accounts.Add(new Account() { Login = username, Password = password, Role = "User" });
+            string role = "Admin";
+            string newCredentials = "Credentials." + username + "." + password + "." + role;
+
+            SHA256 sha256Hash = SHA256.Create();
+            byte[] bytes = sha256Hash.ComputeHash(Encoding.UTF8.GetBytes(newCredentials));
+
+            _dataAccessObject.Credentials.Insert(new Credentials(bytes));
 
             return new JsonResult(null) { StatusCode = 201 };
         }
 
-        [HttpPost("/Grant")]
-        public IActionResult Grant(string username, string newRole)
-        {
-            if (accounts.Exists(x => x.Login == username))
-            {
-                var account = accounts.Find(x => x.Login == username);
-                account.Role = newRole;
-
-                return new JsonResult(null) { StatusCode = 202 };
-
-            } else
-            {
-                return new JsonResult(null) { StatusCode = 404 };
-            }
-            
-        }
-
         private ClaimsIdentity GetIdentity(string username, string password)
         {
-            Account person = accounts.FirstOrDefault(x => x.Login == username && x.Password == password);
-
-            if (person != null)
+            try
             {
-                var claims = new List<Claim>
+                List<Credentials> list = _dataAccessObject.Credentials.FindAll();
+
+                string role = "Admin";
+                string newCredentials = "Credentials." + username + "." + password + "." + role;
+
+                SHA256 sha256Hash = SHA256.Create();
+                byte[] bytes = sha256Hash.ComputeHash(Encoding.UTF8.GetBytes(newCredentials));
+
+                if (list.Any(p => p.Entry.SequenceEqual(bytes)))
                 {
-                    new Claim(ClaimsIdentity.DefaultNameClaimType, person.Login),
+                    var claims = new List<Claim>
+                {
+                    new Claim(ClaimsIdentity.DefaultNameClaimType, username),
 
                 };
-                ClaimsIdentity claimsIdentity =
-                new ClaimsIdentity(claims, "Token", ClaimsIdentity.DefaultNameClaimType,
-                    ClaimsIdentity.DefaultRoleClaimType);
-                return claimsIdentity;
+                    ClaimsIdentity claimsIdentity =
+                    new ClaimsIdentity(claims, "Token", ClaimsIdentity.DefaultNameClaimType,
+                        ClaimsIdentity.DefaultRoleClaimType);
+                    return claimsIdentity;
+                }
+
+            }
+            catch (Exception ex)
+            {
+
             }
 
             return null;
         }
 
-    }
-
-    public class Account
-    {
-        public string Login { get; set; }
-        public string Password { get; set; }
-        public string Role { get; set; }
     }
 }

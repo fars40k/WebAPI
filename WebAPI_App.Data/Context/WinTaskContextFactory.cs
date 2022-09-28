@@ -11,8 +11,10 @@ namespace WebAPI_App.Data
     {
         public WinTaskContext Create()
         {
-            return new WinTaskContext("server = (localdb)\\MSSQLLocalDB; initial catalog = WinTaskManager; " +
+            WinTaskContext context = new WinTaskContext("server = (localdb)\\MSSQLLocalDB; initial catalog = WinTaskManager; " +
                 "integrated security = True; MultipleActiveResultSets = True; App = EntityFramework;");
+
+            return context;
         }
     }
 }

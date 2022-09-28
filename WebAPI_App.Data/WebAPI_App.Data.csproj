@@ -57,8 +57,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Context\WinTaskContextFactory.cs" />
+    <Compile Include="Dao\CredentialsWorker.cs" />
     <Compile Include="Dao\LinkedDataWorker.cs" />
     <Compile Include="DataAccessObject.cs" />
+    <Compile Include="Dto\Credentials.cs" />
     <Compile Include="Dto\Goal.cs" />
     <Compile Include="Dto\GoalsToProjects.cs" />
     <Compile Include="Dto\Person.cs" />

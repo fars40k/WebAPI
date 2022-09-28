@@ -18,6 +18,7 @@ namespace WebAPI_App.Data
         public virtual DbSet<Goal> Goals { get; set; }
         public virtual DbSet<Person> Personel { get; set; }
         public virtual DbSet<Project> Projects { get; set; }
+        public virtual DbSet<Credentials> Credentials { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
@@ -91,6 +92,10 @@ namespace WebAPI_App.Data
             modelBuilder.Entity<Project>()
                 .Property(e => e.Description)
                 .IsUnicode(false);
+
+            modelBuilder.Entity<Credentials>()
+                .Property(e => e.Entry)
+                .IsFixedLength();
         }
 
 
