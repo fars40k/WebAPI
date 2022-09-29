@@ -48,6 +48,7 @@ namespace WebAPI_App.Web.Controllers
                     issuer: _configuration["AppSettings:JWT_issuer"],
                     audience: _configuration["AppSettings:JWT_audience"],
                     notBefore: now,
+                    claims: identity.Claims,
                     expires: now.Add(TimeSpan.FromMinutes(Double.Parse(_configuration["AppSettings:JWT_lifetime"]))),
                     signingCredentials: new SigningCredentials(Authentification.GetSymmetricSecurityKey(), SecurityAlgorithms.HmacSha256));
 
@@ -59,15 +60,15 @@ namespace WebAPI_App.Web.Controllers
                 username = identity.Name
             };
 
-            if (Authentification._accountTokens.ContainsKey(username))
+            if (Authentification.AccountTokens.ContainsKey(username))
             {
 
-                Authentification._accountTokens[username] = encodedJwt;
+                Authentification.AccountTokens[username] = encodedJwt;
 
             } else
             {
 
-                Authentification._accountTokens.Add(username, encodedJwt);
+                Authentification.AccountTokens.Add(username, encodedJwt);
 
             }
 
@@ -78,7 +79,7 @@ namespace WebAPI_App.Web.Controllers
         [HttpPost("/Register")]
         public IActionResult Register(string username, string password)
         {
-            string role = "Admin";
+            string role = roles[0];
             string newCredentials = "Credentials." + username + "." + password + "." + role;
 
             SHA256 sha256Hash = SHA256.Create();
@@ -95,7 +96,7 @@ namespace WebAPI_App.Web.Controllers
             {
                 List<Credentials> list = _dataAccessObject.Credentials.FindAll();
 
-                string role = "Admin";
+                string role = roles[0];
                 string newCredentials = "Credentials." + username + "." + password + "." + role;
 
                 SHA256 sha256Hash = SHA256.Create();

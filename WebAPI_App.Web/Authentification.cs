@@ -9,7 +9,7 @@ namespace WebAPI_App.Web
 {
     public class Authentification
     {
-        public static Dictionary<string, string> _accountTokens = new Dictionary<string, string>();
+        public static Dictionary<string, string> AccountTokens = new Dictionary<string, string>();
 
         const string KEY = "kfryfhkey!123_494473330";
 
