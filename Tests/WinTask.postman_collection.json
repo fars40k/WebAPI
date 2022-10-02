@@ -48,7 +48,7 @@
 			"response": []
 		},
 		{
-			"name": "RemoveGoalFromProject",
+			"name": "AddGoalToProject",
 			"request": {
 				"method": "GET",
 				"header": []
