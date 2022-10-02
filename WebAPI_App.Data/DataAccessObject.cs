@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using WebAPI_App.Data.Interfaces;
 
 namespace WebAPI_App.Data
