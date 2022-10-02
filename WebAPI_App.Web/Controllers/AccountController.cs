@@ -16,7 +16,7 @@ namespace WebAPI_App.Web.Controllers
     [ApiController]
     public class AccountController : ControllerBase
     {
-        private DataAccessObject _dataAccessObject;
+        private DataAccessObject _dataObject;
         private IConfiguration _configuration;
 
         private List<string> roles = new List<string>
@@ -26,7 +26,7 @@ namespace WebAPI_App.Web.Controllers
 
         public AccountController(DataAccessObject dataAccessObject, IConfiguration configuration)
         {
-            _dataAccessObject = dataAccessObject;
+            _dataObject = dataAccessObject;
             _configuration = configuration;
         }
 
@@ -82,7 +82,7 @@ namespace WebAPI_App.Web.Controllers
             SHA256 sha256Hash = SHA256.Create();
             byte[] bytes = sha256Hash.ComputeHash(Encoding.UTF8.GetBytes(newCredentials));
 
-            _dataAccessObject.Credentials.Insert(new Credentials(bytes));
+            _dataObject.Credentials.Insert(new Credentials(bytes));
 
             return new JsonResult(null) { StatusCode = 201 };
         }
@@ -90,7 +90,7 @@ namespace WebAPI_App.Web.Controllers
         [HttpPost("/Unregister")]
         public IActionResult Unregister(string username, string password)
         {
-            _dataAccessObject.Credentials.Delete(username, password, roles[0]);
+            _dataObject.Credentials.Delete(username, password, roles[0]);
 
             return new JsonResult(null) { StatusCode = 200 };
         }
@@ -99,7 +99,7 @@ namespace WebAPI_App.Web.Controllers
         {
             try
             {
-                List<Credentials> list = _dataAccessObject.Credentials.FindAll();
+                List<Credentials> list = _dataObject.Credentials.FindAll();
 
                 string role = roles[0];
                 string newCredentials = "Credentials." + username + "." + password + "." + role;
