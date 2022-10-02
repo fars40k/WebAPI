@@ -84,8 +84,15 @@ namespace WebAPI_App.Data
                 SHA256 sha256Hash = SHA256.Create();
                 byte[] oldAccount = sha256Hash.ComputeHash(Encoding.UTF8.GetBytes($"Credentials.{login}.{password}.{role}"));
 
-                Credentials forDeletion = _context.Credentials.FirstOrDefault(c => c.Entry.SequenceEqual(oldAccount));
-                _context.Credentials.Remove(forDeletion);
+                foreach (Credentials item in _context.Credentials)
+                {
+                    if (item.Entry.SequenceEqual(oldAccount))
+                    {
+                        _context.Credentials.Remove(item);                        
+                        break;
+                    }
+                }
+
                 _context.SaveChanges();
 
             }

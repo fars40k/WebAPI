@@ -90,7 +90,15 @@ namespace WebAPI_App.Web.Controllers
             return new JsonResult(null) { StatusCode = 201 };
         }
 
-        private ClaimsIdentity GetIdentity(string username, string password)
+        [HttpPost("/Unregister")]
+        public IActionResult Unregister(string username, string password)
+        {
+            _dataAccessObject.Credentials.Delete(username, password, roles[0]);
+
+            return new JsonResult(null) { StatusCode = 200 };
+        }
+
+            private ClaimsIdentity GetIdentity(string username, string password)
         {
             try
             {
