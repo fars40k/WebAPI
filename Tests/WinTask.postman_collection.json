@@ -1,0 +1,203 @@
+{
+	"info": {
+		"_postman_id": "795dd8b2-ccac-4556-8af2-65cdcc1c4a92",
+		"name": "WinTask",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "22932365"
+	},
+	"item": [
+		{
+			"name": "FindPersonel",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		},
+		{
+			"name": "FindGoals",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://localhost:44396/api/Goals/",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "44396",
+					"path": [
+						"api",
+						"Goals",
+						""
+					],
+					"query": [
+						{
+							"key": "Authorization",
+							"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiYWRtaW4iLCJpc3MiOiJXZWJBUEkiLCJhdWQiOiJXaW5fRGV2In0.rid0oFJkaxH_msHOWbIslIXkgliTtirvef0-vDBOPBc",
+							"disabled": true
+						},
+						{
+							"key": "username",
+							"value": "admin",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "RemoveGoalFromProject",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		},
+		{
+			"name": "Authorisation",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "https://localhost:44396/token?username=admin&password=12345",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "44396",
+					"path": [
+						"token"
+					],
+					"query": [
+						{
+							"key": "username",
+							"value": "admin"
+						},
+						{
+							"key": "password",
+							"value": "12345"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "AddingAccount",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "https://localhost:44396/token?username=admin&password=12345",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "44396",
+					"path": [
+						"token"
+					],
+					"query": [
+						{
+							"key": "username",
+							"value": "admin"
+						},
+						{
+							"key": "password",
+							"value": "12345"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "DeletingAccount",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "https://localhost:44396/token?username=admin&password=12345",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "44396",
+					"path": [
+						"token"
+					],
+					"query": [
+						{
+							"key": "username",
+							"value": "admin"
+						},
+						{
+							"key": "password",
+							"value": "12345"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GetState",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://localhost:44396/api/State",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "44396",
+					"path": [
+						"api",
+						"State"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Personel",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiYWRtaW4iLCJuYmYiOjE2NjI2NTA0OTMsImV4cCI6MTY2MjY1NDA5MywiaXNzIjoiV2ViX0FQSSIsImF1ZCI6Ildpbl9EZXYifQ.zdkxFQM4JsK3xPVxLhUvcRzJR_M73c3vgAVrf9L5_SU",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "https://localhost:44396/api/Personel/?id=9C63D260-6852-4B71-9619-AA53A89F4511",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "44396",
+					"path": [
+						"api",
+						"Personel",
+						""
+					],
+					"query": [
+						{
+							"key": "id",
+							"value": "9C63D260-6852-4B71-9619-AA53A89F4511"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

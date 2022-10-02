@@ -7,6 +7,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebAPI_App.Data", "WebAPI_A
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebAPI_App.Web", "WebAPI_App.Web\WebAPI_App.Web.csproj", "{1BA7A81B-0639-45E3-A457-CE952F5F9D53}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{7C624A8B-978F-4154-B5CE-B0427E0DE7A0}"
+	ProjectSection(SolutionItems) = preProject
+		Tests\WinTask.postman_collection.json = Tests\WinTask.postman_collection.json
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
