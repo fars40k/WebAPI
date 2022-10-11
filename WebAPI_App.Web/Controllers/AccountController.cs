@@ -95,7 +95,7 @@ namespace WebAPI_App.Web.Controllers
             return new JsonResult(null) { StatusCode = 200 };
         }
 
-            private ClaimsIdentity GetIdentity(string username, string password)
+        private ClaimsIdentity GetIdentity(string username, string password)
         {
             try
             {
